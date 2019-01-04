@@ -1,0 +1,15 @@
+{
+  "name": "messenger-api",
+  "version": "0.0.1",
+  "description": "API gateway for a messaging application.",
+  "main": "index.js",
+  "author": "Leonard Law <leon.wlaw@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "express-graphql": "^0.7.1",
+    "graphql": "^14.0.2"
+  }
+}
