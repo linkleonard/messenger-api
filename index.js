@@ -7,19 +7,29 @@ var cors = require('cors');
 var schema = buildSchema(`
   type Query {
     me: User
+    user(id: ID): User
     users: [User]
+    conversations: [Conversation]
     messages: [Message]
   }
 
   type User {
     id: ID
     name: String
+    conversations: [Conversation]
+    messages: [Message]
+  }
+
+  type Conversation {
+    id: ID
+    participants: [User]
     messages: [Message]
   }
 
   type Message {
     id: ID
-    body: String
+    body: String!
+    conversation: Conversation!
     sender: User!
   }
 `);
@@ -42,31 +52,62 @@ class Message {
 
 const user_store = new Map();
 
-user_store.set(0, new User({
-  id: 0,
+user_store.set("U0", new User({
+  id: "U0",
   name: "John",
 }))
-user_store.set(1, new User({
-  id: 1,
-  name: "John",
+user_store.set("U1", new User({
+  id: "U1",
+  name: "Bob",
 }))
 
 const message_store = new Map();
 
-message_store.set(0, new Message({
-  id: 0,
+message_store.set("M0", new Message({
+  id: "M0",
   body: "Hello world!",
-  senderId: 0,
+  senderId: "U0",
 }))
 
-message_store.set(1, new Message({
-  id: 1,
+message_store.set("M1", new Message({
+  id: "M1",
   body: "Toot",
-  senderId: 1,
+  senderId: "U0",
+}))
+
+message_store.set("M2", new Message({
+  id: "M2",
+  body: "Fee Fi Fo Dee Di Do",
+  senderId: "U0",
+}))
+
+message_store.set("M3", new Message({
+  id: "M3",
+  body: "Toot",
+  senderId: "U1",
+}))
+
+message_store.set("M4", new Message({
+  id: "M4",
+  body: "Fee Fi Fo Dee Di Do",
+  senderId: "U1",
+}))
+
+message_store.set("M5", new Message({
+  id: "M5",
+  body: "Toot",
+  senderId: "U1",
+}))
+
+message_store.set("M6", new Message({
+  id: "M6",
+  body: "Toot",
+  senderId: "U0",
 }))
 
 var root = {
-  me: () => user_store.get(0),
+  me: () => user_store.get("U0"),
+  user: ({id}) => user_store.get(id),
   users: () => user_store.values(),
   messages: () => message_store.values(),
 };
