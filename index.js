@@ -9,6 +9,7 @@ var schema = buildSchema(`
     me: User
     user(id: ID): User
     users: [User]
+    conversation(id: ID): Conversation
     conversations: [Conversation]
     messages(conversationId: ID): [Message]
   }
@@ -78,12 +79,12 @@ conversation_store.set("C0", new Conversation({
 
 conversation_store.set("C1", new Conversation({
   id: "C1",
-  name: null,
+  name: "Other conversation",
 }))
 
 conversation_store.set("C2", new Conversation({
   id: "C2",
-  name: null,
+  name: "Some fancy conversation",
 }))
 
 
