@@ -14,6 +14,10 @@ var schema = buildSchema(`
     messages(conversationId: ID): [Message]
   }
 
+  type Mutation {
+    createMessage(conversationId: ID!, body: String!): Message
+  }
+
   type User {
     id: ID
     name: String
@@ -47,8 +51,13 @@ class User {
 
 class Message {
   constructor (data) { Object.assign(this, data) }
+
   get sender () {
     return user_store.get(this.senderId)
+  }
+
+  get conversation () {
+    return conversation_store.get(this.conversationId);
   }
 }
 
@@ -158,6 +167,17 @@ var root = {
   messages: () => message_store.values(),
   conversation: ({id}) => conversation_store.get(id),
   conversations: () => conversation_store.values(),
+  createMessage: ({ conversationId, body }) => {
+    const id = `M${[...message_store.values()].length}`;
+    const message = new Message({
+      id,
+      conversationId,
+      body,
+      senderId: "U0",
+    });
+    message_store.set(id, message);
+    return message;
+  }
 };
 
 var app = express();
